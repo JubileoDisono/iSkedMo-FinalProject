@@ -1,63 +1,97 @@
 package edu.ucucite.iskedmo;
 
-import android.os.Bundle;
-import android.view.View;
-import android.view.Menu;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.navigation.NavigationView;
-
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.Gravity;
+import android.view.View;
 
 public class HomeActivity extends AppCompatActivity {
-
-    private AppBarConfiguration mAppBarConfiguration;
-
+DrawerLayout drawerLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
-                .setDrawerLayout(drawer)
-                .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-        NavigationUI.setupWithNavController(navigationView, navController);
+        drawerLayout = findViewById(R.id.drawer_layout);
+
+
+    }
+    public void ClickMenu(View view)
+    {
+        openDrawer(drawerLayout);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.home, menu);
-        return true;
+    public static void openDrawer(DrawerLayout drawerLayout) {
+
+        drawerLayout.openDrawer(GravityCompat.START);
+
     }
 
+    public void ClickLogo(View view)
+    {
+        closeDrawer(drawerLayout);
+        
+    }
+
+    public static void closeDrawer(DrawerLayout drawerLayout) {
+         if (drawerLayout.isDrawerOpen(GravityCompat.START));
+         drawerLayout.closeDrawer(GravityCompat.START);
+    }
+
+    public void ClickHome(View view)
+    {
+        recreate();
+    }
+     public void ClickDashboard(View view)
+     {
+         redirectActivity(this,Dashboard.class);
+         
+     }
+
+    public void ClickAboutUs(View view)
+    {
+        redirectActivity(this, AboutUs.class);
+
+    }
+    public void ClickLogout(View view)
+    {
+        logout(this);
+    }
+public static void logout(Activity activity)
+{
+    AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+    builder.setTitle("Logout");
+    builder.setMessage("Are you sure you want to logout?");
+    builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialogInterface, int i) {
+            activity.finishAffinity();
+            System.exit(0);
+        }
+    });
+    builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            dialog.dismiss();
+        }
+    });
+    builder.show();
+}
+    public static void redirectActivity(Activity activity,Class aClass) {
+        Intent intent = new Intent(activity,aClass);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        activity.startActivity(intent);
+    }
     @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
-                || super.onSupportNavigateUp();
+    protected void onPause(){
+        super.onPause();
+        closeDrawer(drawerLayout);
+
     }
 }

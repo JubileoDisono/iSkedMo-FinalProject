@@ -9,10 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ISkedMo">
+        <activity android:name=".AboutUs"></activity>
+        <activity android:name=".Dashboard" />
         <activity
             android:name=".HomeActivity"
             android:label="@string/title_activity_home"
-            android:theme="@style/Theme.ISkedMo.NoActionBar"></activity>
+            android:theme="@style/Theme.ISkedMo.NoActionBar" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
